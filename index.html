@@ -8,60 +8,51 @@
   <title>Test</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <style>
-    nav ul {
-      height: 70%;
-      width: 100%;
-    }
-
-    nav ul {
-      overflow: hidden;
-      overflow-y: scroll;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <h1> Broken Hopes and Dreams </h1>
+<div class="container">
 
-  <div id="connect">
-    <a href="javascript:WebSocketConnect()">Connect</a>
+
+  <h1 class="text-center"> Broken Hopes and Dreams </h1>
+
+  <div id="connect" class="text-center">
+    <a href="javascript:WebSocketConnect()" class="btn btn-primary">Connect</a>
   </div>
 
-  <div id="disconnect" style="display: none;">
-    <a href="javascript:WebSocketDisconnect()">Disconnect</a>
+  <div id="disconnect" class="text-center" style="display: none;">
+    <a href="javascript:WebSocketDisconnect()" class="btn btn-danger">Disconnect</a>
   </div>
 
-  <div class="form" style="display: none;">
+  <div id="form" style="display: none;">
 
-    <form class="form-inline" id="form" action="javascript:WebSocketSend()">
-      <label for="name" class="mr-sm-2">Display name:</label>
-      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="name">
+    <form action="javascript:WebSocketSend()">
+      <div class="form-group w-50 mx-auto animateParent">
+        <label for="name" class="mr-sm-2 animateChild">Display name:</label>
+        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="username">
+      </div>
 
-      <label for="answer" class="mr-sm-2">Answer:</label>
-      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter answer" id="answer">
+      <div class="form-group w-50 mx-auto animateParent">
+        <label for="answer" class="mr-sm-2 animateChild">Answer:</label>
+        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter answer" id="answer">
+      </div>
 
-      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+      <div class="form-group w-50 mx-auto">
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+        <a href="javascript:ClearMessages()" class="btn btn-primary mb-2">X</a>
+      </div>
+
     </form>
-
-    <nav>
-      <ul id="messages">
-        <li>Link 1</li>
-        <li>Link 2</li>
-        <li>Link 3</li>
-        <li>Link 4</li>
-        <li>Link 5</li>
-        <li>Link 6</li>
-        <li>Link 7</li>
-        <li>Link 8</li>
-        <li>Link 9</li>
-        <li>Link 10</li>
-        <li>Link 11</li>
-        <li>Link 13</li>
-        <li>Link 13</li>
-      </ul>
-    </nav>
   </div>
+
+
+      <div class="messages w-50 mx-auto">
+        <ul id="messages">
+        </ul>
+      </div>
+
+</div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -69,13 +60,13 @@
 
   <script type="text/javascript">
     var ws;
-    var connect, disconnect, form, name, answer, messages;
+    var connect, disconnect, form, username, answer, messages;
 
     $(window).on("load", function() {
       connect = document.getElementById('connect');
       disconnect = document.getElementById('disconnect');
       form = document.getElementById('form');
-      name = document.getElementById('name');
+      username = document.getElementById('username');
       answer = document.getElementById('answer');
       message = document.getElementById('messages');
     });
@@ -83,6 +74,9 @@
     function WebSocketConnect() {
 
       if ("WebSocket" in window) {
+
+        ShowMessage('{"Username":"System message", "Answer":"Connecting..."}', 2);
+
 
         var uri =
           "wss://connect.websocket.in/v2/1?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBhZmEyZjhmZDcyMmUzMjIwYjg1ZTIxYTk1NjkzZWNmM2Q3MWExNmI5YzZjNGExYzUzYWZmNDBkYjUxNTE3NmRkZjdlMTk5MzJkNzk2ZWJkIn0.eyJhdWQiOiI4IiwianRpIjoiMGFmYTJmOGZkNzIyZTMyMjBiODVlMjFhOTU2OTNlY2YzZDcxYTE2YjljNmM0YTFjNTNhZmY0MGRiNTE1MTc2ZGRmN2UxOTkzMmQ3OTZlYmQiLCJpYXQiOjE1ODA1NTcxMTksIm5iZiI6MTU4MDU1NzExOSwiZXhwIjoxNjEyMTc5NTE5LCJzdWIiOiI0NTYiLCJzY29wZXMiOltdfQ.V7IvNsr5lj9p8l1qWvkn62rCOmoFh2Kc02bGbBc2NxSUDOIfn5CsI3SqnbBFd5hAFFFiajpomvILLVrErqj6QYjcJzyFasvt68hfYlGGFw_UTNG4iApxPRFkBvQZfMiSc3F8DX1mpR6iDl7OGqDL7EDDWHxief5hPXs12VvisKZXIKJBod2whBTJ-YWrPkIEMwJkb1_gA2QyZ9kCKdEXubOGwXDNSoq1ImPeQMCibbuuCYrzUHeUP4378-XLX8NqIsQrqmc3NKLwvrPk9SP-ulyVfpnikglrd_aqyiN93TogvsZrmNqz97PyLRIED8l4BN7XoY9GcGrP5dxJW6BFSx1swnd6u8m8KmUTbUsr-VyybALEuluwQWnGyU5ix6W2bz2FXm_PwzJR-h8FX-4ehksyhgNVz-l2athYvwfJ4lgyQVn4xiMGuBvt3-yMyTAm2MtwNEKEpUuhJMjulDkq9Nnen6-WVtuym2AFWzCulw4SufeFis_WxhJcZJKGEJEW597z7A-wAQUoC3DiPD64fHHTCaqWkUAVknK0a1PIL9uk3RSo5x70MdpDr0zMy9mPg6GxqbG_KfAiYVDZq2S1bylGiaL00IK2iYD0yuOw1VlMs6CJGwmgCVtpRMu9OX-vR8HjkdPmEyObuJX575TnESRyK75PzjiMhJJH-RVTUUo";
@@ -95,17 +89,21 @@
           connect.style.display = 'none';
           disconnect.style.display = 'block';
           form.style.display = 'block';
+          ClearMessages();
+          ShowMessage('{"Username":"System message", "Answer":"Welcome. Please enter a name and guess away!"}', 2);
         };
 
         ws.onmessage = function(evt) {
           var received_msg = evt.data;
-          message.innerHTML += received_msg;
+          ShowMessage(received_msg);
         };
 
         ws.onclose = function() {
           connect.style.display = 'block';
           disconnect.style.display = 'none';
           form.style.display = 'none';
+          ShowMessage('{"Username":"System message", "Answer":"You disconnected from the server."}', 2);
+
         };
       } else {
 
@@ -124,13 +122,35 @@
         return;
       }
 
-      if (name.value != "" && answer.value != "") {
-        var message = `{"Username":"${name.value}", "Answer":"${answer.value}"}`;
-        var formattedMessage = toUTF8Array(message);
-        ws.send(message);
-
-        answer.value = "";
+      if (username.value === "" || answer.value === "") {
+        return;
       }
+
+      var message = `{"Username":"${username.value}", "Answer":"${answer.value}"}`;
+      var formattedMessage = toUTF8Array(message);
+      ws.send(message);
+
+      answer.value = "";
+      ShowMessage(message, 1);
+    }
+
+    function ShowMessage(msg, type = 0){
+      var obj = JSON.parse(msg);
+
+      if (obj === null)
+        return;
+
+      if (type === 0){
+        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-success">${obj.Answer}</span></li>` + message.innerHTML;
+      } else if (type === 1){
+        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-primary">${obj.Answer}</span></li>` + message.innerHTML;
+      } else {
+        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-warning">${obj.Answer}</span></li>` + message.innerHTML;
+      }
+    }
+
+    function ClearMessages(){
+      message.innerHTML = "";
     }
 
     function toUTF8Array(str) {

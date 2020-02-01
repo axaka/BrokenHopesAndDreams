@@ -1,0 +1,36 @@
+html {
+  height: 100vh;
+}
+
+body {
+  background-color: #66ccff;
+  height: 100vh;
+}
+
+label {
+  margin-bottom: 0px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  margin-top: 10px;
+}
+
+.messages {
+  height: 50vh;
+  width: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.animateChild {
+  margin-left: 10px;
+  transition: margin-left 0.5s;
+}
+
+.animateParent:hover .animateChild {
+  margin-left: 0px;
+}
