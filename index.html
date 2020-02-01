@@ -28,53 +28,57 @@
     <a href="javascript:WebSocketConnect()">Connect</a>
   </div>
 
-  <div id="disconnect">
-    <a href="javascript:WebSocketDisconnect()" style="display: none;">Disconnect</a>
+  <div id="disconnect" style="display: none;">
+    <a href="javascript:WebSocketDisconnect()">Disconnect</a>
   </div>
 
-  <form class="form-inline" id="form" action="javascript:WebSocketSend()">
-    <label for="name" class="mr-sm-2">Display name:</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="name">
+  <div class="form" style="display: none;">
 
-    <label for="answer" class="mr-sm-2">Answer:</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter answer" id="answer">
+    <form class="form-inline" id="form" action="javascript:WebSocketSend()">
+      <label for="name" class="mr-sm-2">Display name:</label>
+      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="name">
 
-    <button type="submit" class="btn btn-primary mb-2">Submit</button>
-  </form>
+      <label for="answer" class="mr-sm-2">Answer:</label>
+      <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter answer" id="answer">
 
-  <nav>
-    <ul id="messages">
-      <li>Link 1</li>
-      <li>Link 2</li>
-      <li>Link 3</li>
-      <li>Link 4</li>
-      <li>Link 5</li>
-      <li>Link 6</li>
-      <li>Link 7</li>
-      <li>Link 8</li>
-      <li>Link 9</li>
-      <li>Link 10</li>
-      <li>Link 11</li>
-      <li>Link 13</li>
-      <li>Link 13</li>
-    </ul>
-  </nav>
+      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    </form>
+
+    <nav>
+      <ul id="messages">
+        <li>Link 1</li>
+        <li>Link 2</li>
+        <li>Link 3</li>
+        <li>Link 4</li>
+        <li>Link 5</li>
+        <li>Link 6</li>
+        <li>Link 7</li>
+        <li>Link 8</li>
+        <li>Link 9</li>
+        <li>Link 10</li>
+        <li>Link 11</li>
+        <li>Link 13</li>
+        <li>Link 13</li>
+      </ul>
+    </nav>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
   <script type="text/javascript">
     var ws;
     var connect, disconnect, form, name, answer, messages;
 
-    (function() {
+    $(window).on("load", function() {
       connect = document.getElementById('connect');
       disconnect = document.getElementById('disconnect');
       form = document.getElementById('form');
       name = document.getElementById('name');
       answer = document.getElementById('answer');
       message = document.getElementById('messages');
-    })();
+    });
 
     function WebSocketConnect() {
 
@@ -90,7 +94,7 @@
 
           connect.style.display = 'none';
           disconnect.style.display = 'block';
-          ws.send("Message to send");
+          form.style.display = 'block';
         };
 
         ws.onmessage = function(evt) {
@@ -101,6 +105,7 @@
         ws.onclose = function() {
           connect.style.display = 'block';
           disconnect.style.display = 'none';
+          form.style.display = 'none';
         };
       } else {
 
@@ -114,11 +119,13 @@
     }
 
     function WebSocketSend() {
-      var name = name.value;
-      var answer = answer.value;
 
-      if (name != "" && answer != "") {
-        var message = `{"Username":"${name}", "Answer":"${answer}"}`;
+      if (ws == null) {
+        return;
+      }
+
+      if (name.value != "" && answer.value != "") {
+        var message = `{"Username":"${name.value}", "Answer":"${answer.value}"}`;
         var formattedMessage = toUTF8Array(message);
         ws.send(message);
 
