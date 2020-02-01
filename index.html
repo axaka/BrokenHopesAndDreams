@@ -9,32 +9,31 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
   <script type = "text/javascript">
-           function WebSocketTest() {
+
+  var ws;
+           function WebSocketConnect() {
 
               if ("WebSocket" in window) {
-                 alert("WebSocket is supported by your Browser!");
 
                  var uri = "wss://connect.websocket.in/v2/1?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBhZmEyZjhmZDcyMmUzMjIwYjg1ZTIxYTk1NjkzZWNmM2Q3MWExNmI5YzZjNGExYzUzYWZmNDBkYjUxNTE3NmRkZjdlMTk5MzJkNzk2ZWJkIn0.eyJhdWQiOiI4IiwianRpIjoiMGFmYTJmOGZkNzIyZTMyMjBiODVlMjFhOTU2OTNlY2YzZDcxYTE2YjljNmM0YTFjNTNhZmY0MGRiNTE1MTc2ZGRmN2UxOTkzMmQ3OTZlYmQiLCJpYXQiOjE1ODA1NTcxMTksIm5iZiI6MTU4MDU1NzExOSwiZXhwIjoxNjEyMTc5NTE5LCJzdWIiOiI0NTYiLCJzY29wZXMiOltdfQ.V7IvNsr5lj9p8l1qWvkn62rCOmoFh2Kc02bGbBc2NxSUDOIfn5CsI3SqnbBFd5hAFFFiajpomvILLVrErqj6QYjcJzyFasvt68hfYlGGFw_UTNG4iApxPRFkBvQZfMiSc3F8DX1mpR6iDl7OGqDL7EDDWHxief5hPXs12VvisKZXIKJBod2whBTJ-YWrPkIEMwJkb1_gA2QyZ9kCKdEXubOGwXDNSoq1ImPeQMCibbuuCYrzUHeUP4378-XLX8NqIsQrqmc3NKLwvrPk9SP-ulyVfpnikglrd_aqyiN93TogvsZrmNqz97PyLRIED8l4BN7XoY9GcGrP5dxJW6BFSx1swnd6u8m8KmUTbUsr-VyybALEuluwQWnGyU5ix6W2bz2FXm_PwzJR-h8FX-4ehksyhgNVz-l2athYvwfJ4lgyQVn4xiMGuBvt3-yMyTAm2MtwNEKEpUuhJMjulDkq9Nnen6-WVtuym2AFWzCulw4SufeFis_WxhJcZJKGEJEW597z7A-wAQUoC3DiPD64fHHTCaqWkUAVknK0a1PIL9uk3RSo5x70MdpDr0zMy9mPg6GxqbG_KfAiYVDZq2S1bylGiaL00IK2iYD0yuOw1VlMs6CJGwmgCVtpRMu9OX-vR8HjkdPmEyObuJX575TnESRyK75PzjiMhJJH-RVTUUo";
 
                  // Let us open a web socket
-                 var ws = new WebSocket(uri);
+                 ws = new WebSocket(uri);
 
                  ws.onopen = function() {
 
-                    // Web Socket is connected, send data using send()
+                   document.getElementById('connect').style.visibility='hidden';
+                   document.getElementById('disconnect').style.visibility='visible';
                     ws.send("Message to send");
-                    alert("Message is sent...");
                  };
 
                  ws.onmessage = function (evt) {
                     var received_msg = evt.data;
-                    alert("Message is received...");
                  };
 
                  ws.onclose = function() {
-
-                    // websocket is closed.
-                    alert("Connection is closed...");
+                   document.getElementById('connect').style.visibility='visible';
+                   document.getElementById('disconnect').style.visibility='hidden';
                  };
               } else {
 
@@ -42,14 +41,23 @@
                  alert("WebSocket NOT supported by your Browser!");
               }
            }
+
+function WebSocketDisconnect(){
+  ws.close();
+}
+
         </script>
 </head>
 <body>
-  <h1> Hello World! </h>
+  <h1> Broken Hopes and Dreams </h1>
 
-    <div id = "sse">
-         <a href = "javascript:WebSocketTest()">Run WebSocket</a>
-      </div>
+    <div id = "connect">
+      <a href = "javascript:WebSocketConnect()">Connect</a>
+    </div>
+
+    <div id = "disconnect">
+      <a href = "javascript:WebSocketDisconnect()">Disconnect</a>
+    </div>
 
 </body>
 </html>
