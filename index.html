@@ -22,8 +22,8 @@
 
                  ws.onopen = function() {
 
-                   document.getElementById('connect').style.visibility='hidden';
-                   document.getElementById('disconnect').style.visibility='visible';
+                   document.getElementById('connect').style.display='none';
+                   document.getElementById('disconnect').style.display='';
                     ws.send("Message to send");
                  };
 
@@ -32,8 +32,8 @@
                  };
 
                  ws.onclose = function() {
-                   document.getElementById('connect').style.visibility='visible';
-                   document.getElementById('disconnect').style.visibility='hidden';
+                   document.getElementById('connect').style.display='';
+                   document.getElementById('disconnect').style.display='none';
                  };
               } else {
 
@@ -56,7 +56,7 @@ function WebSocketDisconnect(){
     </div>
 
     <div id = "disconnect">
-      <a href = "javascript:WebSocketDisconnect()">Disconnect</a>
+      <a href = "javascript:WebSocketDisconnect()" style="display:none;">Disconnect</a>
     </div>
 
 </body>
