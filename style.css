@@ -5,6 +5,12 @@ html {
 body {
   background-color: #66ccff;
   height: 100vh;
+
+  font-size: 1.0em;
+}
+
+h1 {
+  font-size: 200%;
 }
 
 label {
