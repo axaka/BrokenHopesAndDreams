@@ -8,8 +8,30 @@
   <title>Test</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+  <style>
+    nav ul {
+      height: 70%;
+      width: 100%;
+    }
+
+    nav ul {
+      overflow: hidden;
+      overflow-y: scroll;
+    }
+  </style>
+
   <script type="text/javascript">
     var ws;
+    var connect, disconnect, form, name, answer, messages;
+
+    (function() {
+      connect = document.getElementById('connect');
+      disconnect = document.getElementById('disconnect');
+      form = document.getElementById('form');
+      name = document.getElementById('name');
+      answer = document.getElementById('answer');
+      message = document.getElementById('messages');
+      })();
 
     function WebSocketConnect() {
 
@@ -23,18 +45,19 @@
 
         ws.onopen = function() {
 
-          document.getElementById('connect').style.display = 'none';
-          document.getElementById('disconnect').style.display = '';
+          connect.style.display = 'none';
+          disconnect.style.display = 'block';
           ws.send("Message to send");
         };
 
         ws.onmessage = function(evt) {
           var received_msg = evt.data;
+          message.innerHTML += received_msg;
         };
 
         ws.onclose = function() {
-          document.getElementById('connect').style.display = 'block';
-          document.getElementById('disconnect').style.display = 'none';
+          connect.style.display = 'block';
+          disconnect.style.display = 'none';
         };
       } else {
 
@@ -48,47 +71,47 @@
     }
 
     function WebSocketSend() {
-      var name = document.getElementById('name').value;
-      var answer = document.getElementById('answer').value;
+      var name = name.value;
+      var answer = answer.value;
 
-      if (name != "" && answer != "")
-      {
+      if (name != "" && answer != "") {
         var message = `{"Username":"${name}", "Answer":"${answer}"}`;
         var formattedMessage = toUTF8Array(message);
-        ws.send(formattedMessage);
+        ws.send(message);
+
+        answer.value = "";
       }
     }
 
     function toUTF8Array(str) {
-    var utf8 = [];
-    for (var i=0; i < str.length; i++) {
+      var utf8 = [];
+      for (var i = 0; i < str.length; i++) {
         var charcode = str.charCodeAt(i);
         if (charcode < 0x80) utf8.push(charcode);
         else if (charcode < 0x800) {
-            utf8.push(0xc0 | (charcode >> 6),
-                      0x80 | (charcode & 0x3f));
-        }
-        else if (charcode < 0xd800 || charcode >= 0xe000) {
-            utf8.push(0xe0 | (charcode >> 12),
-                      0x80 | ((charcode>>6) & 0x3f),
-                      0x80 | (charcode & 0x3f));
+          utf8.push(0xc0 | (charcode >> 6),
+            0x80 | (charcode & 0x3f));
+        } else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+            0x80 | ((charcode >> 6) & 0x3f),
+            0x80 | (charcode & 0x3f));
         }
         // surrogate pair
         else {
-            i++;
-            // UTF-16 encodes 0x10000-0x10FFFF by
-            // subtracting 0x10000 and splitting the
-            // 20 bits of 0x0-0xFFFFF into two halves
-            charcode = 0x10000 + (((charcode & 0x3ff)<<10)
-                      | (str.charCodeAt(i) & 0x3ff))
-            utf8.push(0xf0 | (charcode >>18),
-                      0x80 | ((charcode>>12) & 0x3f),
-                      0x80 | ((charcode>>6) & 0x3f),
-                      0x80 | (charcode & 0x3f));
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff) << 10) |
+            (str.charCodeAt(i) & 0x3ff))
+          utf8.push(0xf0 | (charcode >> 18),
+            0x80 | ((charcode >> 12) & 0x3f),
+            0x80 | ((charcode >> 6) & 0x3f),
+            0x80 | (charcode & 0x3f));
         }
+      }
+      return utf8;
     }
-    return utf8;
-}
   </script>
 </head>
 
@@ -103,7 +126,7 @@
     <a href="javascript:WebSocketDisconnect()" style="display: none;">Disconnect</a>
   </div>
 
-  <form class="form-inline" action="javascript:WebSocketSend()">
+  <form class="form-inline" id="form" action="javascript:WebSocketSend()">
     <label for="name" class="mr-sm-2">Display name:</label>
     <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="name">
 
@@ -112,6 +135,24 @@
 
     <button type="submit" class="btn btn-primary mb-2">Submit</button>
   </form>
+
+  <nav>
+            <ul id="messages">
+                <li>Link 1</li>
+                <li>Link 2</li>
+                <li>Link 3</li>
+                <li>Link 4</li>
+                <li>Link 5</li>
+                <li>Link 6</li>
+                <li>Link 7</li>
+                <li>Link 8</li>
+                <li>Link 9</li>
+                <li>Link 10</li>
+                <li>Link 11</li>
+                <li>Link 13</li>
+                <li>Link 13</li>
+            </ul>
+        </nav>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
