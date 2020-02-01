@@ -7,30 +7,49 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title>Test</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script type = "text/javascript">
+           function WebSocketTest() {
+
+              if ("WebSocket" in window) {
+                 alert("WebSocket is supported by your Browser!");
+
+                 var uri = "wss://connect.websocket.in/v2/1?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBhZmEyZjhmZDcyMmUzMjIwYjg1ZTIxYTk1NjkzZWNmM2Q3MWExNmI5YzZjNGExYzUzYWZmNDBkYjUxNTE3NmRkZjdlMTk5MzJkNzk2ZWJkIn0.eyJhdWQiOiI4IiwianRpIjoiMGFmYTJmOGZkNzIyZTMyMjBiODVlMjFhOTU2OTNlY2YzZDcxYTE2YjljNmM0YTFjNTNhZmY0MGRiNTE1MTc2ZGRmN2UxOTkzMmQ3OTZlYmQiLCJpYXQiOjE1ODA1NTcxMTksIm5iZiI6MTU4MDU1NzExOSwiZXhwIjoxNjEyMTc5NTE5LCJzdWIiOiI0NTYiLCJzY29wZXMiOltdfQ.V7IvNsr5lj9p8l1qWvkn62rCOmoFh2Kc02bGbBc2NxSUDOIfn5CsI3SqnbBFd5hAFFFiajpomvILLVrErqj6QYjcJzyFasvt68hfYlGGFw_UTNG4iApxPRFkBvQZfMiSc3F8DX1mpR6iDl7OGqDL7EDDWHxief5hPXs12VvisKZXIKJBod2whBTJ-YWrPkIEMwJkb1_gA2QyZ9kCKdEXubOGwXDNSoq1ImPeQMCibbuuCYrzUHeUP4378-XLX8NqIsQrqmc3NKLwvrPk9SP-ulyVfpnikglrd_aqyiN93TogvsZrmNqz97PyLRIED8l4BN7XoY9GcGrP5dxJW6BFSx1swnd6u8m8KmUTbUsr-VyybALEuluwQWnGyU5ix6W2bz2FXm_PwzJR-h8FX-4ehksyhgNVz-l2athYvwfJ4lgyQVn4xiMGuBvt3-yMyTAm2MtwNEKEpUuhJMjulDkq9Nnen6-WVtuym2AFWzCulw4SufeFis_WxhJcZJKGEJEW597z7A-wAQUoC3DiPD64fHHTCaqWkUAVknK0a1PIL9uk3RSo5x70MdpDr0zMy9mPg6GxqbG_KfAiYVDZq2S1bylGiaL00IK2iYD0yuOw1VlMs6CJGwmgCVtpRMu9OX-vR8HjkdPmEyObuJX575TnESRyK75PzjiMhJJH-RVTUUo";
+
+                 // Let us open a web socket
+                 var ws = new WebSocket(uri);
+
+                 ws.onopen = function() {
+
+                    // Web Socket is connected, send data using send()
+                    ws.send("Message to send");
+                    alert("Message is sent...");
+                 };
+
+                 ws.onmessage = function (evt) {
+                    var received_msg = evt.data;
+                    alert("Message is received...");
+                 };
+
+                 ws.onclose = function() {
+
+                    // websocket is closed.
+                    alert("Connection is closed...");
+                 };
+              } else {
+
+                 // The browser doesn't support WebSocket
+                 alert("WebSocket NOT supported by your Browser!");
+              }
+           }
+        </script>
 </head>
 <body>
   <h1> Hello World! </h>
 
-<script>
-  $(function () {
+    <div id = "sse">
+         <a href = "javascript:WebSocketTest()">Run WebSocket</a>
+      </div>
 
-    var uri = "wss://connect.websocket.in/v2/1?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBhZmEyZjhmZDcyMmUzMjIwYjg1ZTIxYTk1NjkzZWNmM2Q3MWExNmI5YzZjNGExYzUzYWZmNDBkYjUxNTE3NmRkZjdlMTk5MzJkNzk2ZWJkIn0.eyJhdWQiOiI4IiwianRpIjoiMGFmYTJmOGZkNzIyZTMyMjBiODVlMjFhOTU2OTNlY2YzZDcxYTE2YjljNmM0YTFjNTNhZmY0MGRiNTE1MTc2ZGRmN2UxOTkzMmQ3OTZlYmQiLCJpYXQiOjE1ODA1NTcxMTksIm5iZiI6MTU4MDU1NzExOSwiZXhwIjoxNjEyMTc5NTE5LCJzdWIiOiI0NTYiLCJzY29wZXMiOltdfQ.V7IvNsr5lj9p8l1qWvkn62rCOmoFh2Kc02bGbBc2NxSUDOIfn5CsI3SqnbBFd5hAFFFiajpomvILLVrErqj6QYjcJzyFasvt68hfYlGGFw_UTNG4iApxPRFkBvQZfMiSc3F8DX1mpR6iDl7OGqDL7EDDWHxief5hPXs12VvisKZXIKJBod2whBTJ-YWrPkIEMwJkb1_gA2QyZ9kCKdEXubOGwXDNSoq1ImPeQMCibbuuCYrzUHeUP4378-XLX8NqIsQrqmc3NKLwvrPk9SP-ulyVfpnikglrd_aqyiN93TogvsZrmNqz97PyLRIED8l4BN7XoY9GcGrP5dxJW6BFSx1swnd6u8m8KmUTbUsr-VyybALEuluwQWnGyU5ix6W2bz2FXm_PwzJR-h8FX-4ehksyhgNVz-l2athYvwfJ4lgyQVn4xiMGuBvt3-yMyTAm2MtwNEKEpUuhJMjulDkq9Nnen6-WVtuym2AFWzCulw4SufeFis_WxhJcZJKGEJEW597z7A-wAQUoC3DiPD64fHHTCaqWkUAVknK0a1PIL9uk3RSo5x70MdpDr0zMy9mPg6GxqbG_KfAiYVDZq2S1bylGiaL00IK2iYD0yuOw1VlMs6CJGwmgCVtpRMu9OX-vR8HjkdPmEyObuJX575TnESRyK75PzjiMhJJH-RVTUUo";
-
-    var socket = io(uri);
-    $('form').submit(function(e){
-      e.preventDefault(); // prevents page reloading
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-    });
-    socket.on('chat message', function(msg){
-      $('#messages').append($('<li>').text(msg));
-    });
-  });
-</script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
