@@ -30,17 +30,17 @@
   <div id="form" style="display: none;">
 
     <form action="javascript:WebSocketSend()">
-      <div class="form-group w-50 mx-auto animateParent">
-        <label for="name" class="mr-sm-2 animateChild">Display name:</label>
+      <div class="form-group w-75 mx-auto animateParent">
+        <label for="name" class="mr-sm-2 animateChild">Username:</label>
         <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Display name" id="username">
       </div>
 
-      <div class="form-group w-50 mx-auto animateParent">
+      <div class="form-group w-75 mx-auto animateParent">
         <label for="answer" class="mr-sm-2 animateChild">Answer:</label>
         <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter answer" id="answer">
       </div>
 
-      <div class="form-group w-50 mx-auto">
+      <div class="form-group w-75 mx-auto">
         <button type="submit" class="btn btn-primary mb-2">Submit</button>
         <a href="javascript:ClearMessages()" class="btn btn-primary mb-2">X</a>
       </div>
@@ -49,7 +49,7 @@
   </div>
 
 
-      <div class="messages w-50 mx-auto">
+      <div class="messages w-75 mx-auto">
         <ul id="messages">
         </ul>
       </div>
@@ -92,7 +92,9 @@
           disconnect.style.display = 'block';
           form.style.display = 'block';
           ClearMessages();
-          ShowMessage('{"Username":"System message", "Answer":"Welcome. Please enter a name and guess away!"}', 2);
+          ShowMessage('{"Username":"System message", "Answer":"Answer as many times as you want!"}', 2);
+          ShowMessage('{"Username":"System message", "Answer":"Please enter a Username."}', 2);
+          ShowMessage('{"Username":"System message", "Answer":"Welcome!"}', 2);
         };
 
         ws.onmessage = function(evt) {
@@ -143,11 +145,11 @@
         return;
 
       if (type === 0){
-        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-success">${obj.Answer}</span></li>` + message.innerHTML;
+        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-success">${obj.Answer}</span></li>` + message.innerHTML;
       } else if (type === 1){
-        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-primary">${obj.Answer}</span></li>` + message.innerHTML;
+        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-primary">${obj.Answer}</span></li>` + message.innerHTML;
       } else {
-        message.innerHTML = `<li>${obj.Username}: <span class="btn btn-warning">${obj.Answer}</span></li>` + message.innerHTML;
+        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-warning">${obj.Answer}</span></li>` + message.innerHTML;
       }
     }
 
