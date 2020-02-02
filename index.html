@@ -42,7 +42,7 @@
 
         <div class="form-group w-75 mx-auto">
           <button type="submit" class="btn btn-primary mb-2">Submit</button>
-          <a href="javascript:ClearMessages()" class="btn btn-primary mb-2">X</a>
+          <a href="javascript:ClearMessages()" class="btn btn-danger mb-2">Clear</a>
         </div>
 
       </form>
@@ -78,7 +78,7 @@
 
       if ("WebSocket" in window) {
 
-        ShowMessage('{"Username":"System message", "Answer":"Connecting..."}', 2);
+        ShowMessage('{"AdminMessage":"Connecting..."}');
 
 
         var uri =
@@ -93,9 +93,9 @@
           disconnect.style.display = 'block';
           form.style.display = 'block';
           ClearMessages();
-          ShowMessage('{"Username":"System message", "Answer":"Answer as many times as you want!"}', 2);
-          ShowMessage('{"Username":"System message", "Answer":"Please enter a Username."}', 2);
-          ShowMessage('{"Username":"System message", "Answer":"Welcome!"}', 2);
+          ShowMessage('{"AdminMessage":"Answer as many times as you want!"}');
+          ShowMessage('{"AdminMessage":"Please enter a Username."}');
+          ShowMessage('{"AdminMessage":"Welcome!"}');
         };
 
         ws.onmessage = function(evt) {
@@ -107,8 +107,7 @@
           connect.style.display = 'block';
           disconnect.style.display = 'none';
           form.style.display = 'none';
-          ShowMessage('{"Username":"System message", "Answer":"You disconnected from the server."}', 2);
-
+          ShowMessage('{"AdminMessage":"You disconnected from the server."}');
         };
       } else {
 
@@ -127,12 +126,17 @@
         return;
       }
 
-      if (username.value === "" || answer.value === "") {
+      if (username.value === "") {
+        ShowMessage('{"AdminMessage":"You need a username"}');
+        return;
+      }
+      if (answer.value === "") {
         return;
       }
 
+
+
       var message = `{"Username":"${username.value}", "Answer":"${answer.value}"}`;
-      var formattedMessage = toUTF8Array(message);
       ws.send(message);
 
       answer.value = "";
@@ -145,47 +149,22 @@
       if (obj === null)
         return;
 
-      if (type === 0) {
-        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-success">${obj.Answer}</span></li>` + message.innerHTML;
-      } else if (type === 1) {
-        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-primary">${obj.Answer}</span></li>` + message.innerHTML;
-      } else {
-        message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-warning">${obj.Answer}</span></li>` + message.innerHTML;
+      if (obj.hasOwnProperty('Username') && obj.hasOwnProperty('Answer')){
+        if (type === 0) {
+          message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-success">${obj.Answer}</span></li>` + message.innerHTML;
+        } else {
+          message.innerHTML = `<li>${obj.Username}:<br><span class="btn btn-primary">${obj.Answer}</span></li>` + message.innerHTML;
+        }
       }
+
+      if (obj.hasOwnProperty('AdminMessage')){
+        message.innerHTML = `<li>Server:<br><span class="btn btn-warning">${obj.AdminMessage}</span></li>` + message.innerHTML;
+      }
+
     }
 
     function ClearMessages() {
       message.innerHTML = "";
-    }
-
-    function toUTF8Array(str) {
-      var utf8 = [];
-      for (var i = 0; i < str.length; i++) {
-        var charcode = str.charCodeAt(i);
-        if (charcode < 0x80) utf8.push(charcode);
-        else if (charcode < 0x800) {
-          utf8.push(0xc0 | (charcode >> 6),
-            0x80 | (charcode & 0x3f));
-        } else if (charcode < 0xd800 || charcode >= 0xe000) {
-          utf8.push(0xe0 | (charcode >> 12),
-            0x80 | ((charcode >> 6) & 0x3f),
-            0x80 | (charcode & 0x3f));
-        }
-        // surrogate pair
-        else {
-          i++;
-          // UTF-16 encodes 0x10000-0x10FFFF by
-          // subtracting 0x10000 and splitting the
-          // 20 bits of 0x0-0xFFFFF into two halves
-          charcode = 0x10000 + (((charcode & 0x3ff) << 10) |
-            (str.charCodeAt(i) & 0x3ff))
-          utf8.push(0xf0 | (charcode >> 18),
-            0x80 | ((charcode >> 12) & 0x3f),
-            0x80 | ((charcode >> 6) & 0x3f),
-            0x80 | (charcode & 0x3f));
-        }
-      }
-      return utf8;
     }
   </script>
 </body>

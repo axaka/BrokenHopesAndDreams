@@ -33,7 +33,6 @@ li {
   height: 60vh;
   width: 100%;
   overflow: hidden;
-  overflow-y: scroll;
 }
 
 .animateChild {
